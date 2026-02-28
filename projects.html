@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Prachi Narnaware</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Page-specific styles */
+    .page-hero {
+      padding: 8rem 5% 4rem;
+      text-align: center;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: rgba(79,122,255,0.06);
+      border-radius: 50%;
+      filter: blur(100px);
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .page-hero .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      transition: color 0.2s;
+    }
+    .page-hero .back-link:hover { color: var(--accent); }
+    .page-hero h1 {
+      animation: none;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-bottom: 1rem;
+    }
+    .page-hero p {
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      margin: 2.5rem 0 3rem;
+    }
+    .filter-btn {
+      padding: 0.45rem 1.1rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Extended projects grid */
+    .projects-full-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 1000px) { .projects-full-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 620px)  { .projects-full-grid { grid-template-columns: 1fr; } }
+
+    /* Project detail card */
+    .project-card-full {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 2rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card-full::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      background: linear-gradient(135deg, rgba(79,122,255,0.05), rgba(0,212,170,0.03));
+      transition: opacity 0.3s;
+    }
+    .project-card-full:hover::before { opacity: 1; }
+    .project-card-full:hover {
+      border-color: rgba(79,122,255,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .project-card-full .project-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: rgba(79,122,255,0.1);
+      position: absolute;
+      top: 1rem;
+      right: 1.2rem;
+      line-height: 1;
+    }
+    .project-category {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent2);
+      margin-bottom: 0.5rem;
+    }
+    .project-card-full .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+    .project-card-full .project-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 1.2rem;
+      flex: 1;
+    }
+    .project-highlights {
+      list-style: none;
+      margin-bottom: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .project-highlights li {
+      font-size: 0.82rem;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .project-highlights li::before {
+      content: '▸';
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+    .project-card-full .project-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .project-card-full .project-impact {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--accent2);
+      padding: 0.6rem 0.9rem;
+      background: rgba(0,212,170,0.07);
+      border-radius: 8px;
+      margin-bottom: 1.2rem;
+      border: 1px solid rgba(0,212,170,0.15);
+    }
+    .project-card-full .project-links {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .project-card-full .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid rgba(79,122,255,0.3);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .project-card-full .project-link:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .project-card-full .project-link.demo {
+      color: var(--accent2);
+      border-color: rgba(0,212,170,0.3);
+    }
+    .project-card-full .project-link.demo:hover {
+      background: var(--accent2);
+      color: #fff;
+      border-color: var(--accent2);
+    }
+
+    /* Stats summary bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      padding: 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 3rem;
+    }
+    .stats-bar-item { text-align: center; }
+    .stats-bar-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .stats-bar-label { font-size: 0.8rem; color: var(--muted); }
+
+    section.projects-page { padding: 4rem 5%; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">AS.</div>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#certifications">Certifications</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">🔆</button>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html#about" class="mobile-nav-link">About</a>
+    <a href="index.html#skills" class="mobile-nav-link">Skills</a>
+    <a href="index.html#projects" class="mobile-nav-link">Projects</a>
+    <a href="index.html#certifications" class="mobile-nav-link">Certifications</a>
+    <a href="index.html#contact" class="mobile-nav-link">Contact</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <a href="index.html" class="back-link">← Back to Portfolio</a>
+    <div class="section-tag">My Work</div>
+    <h1 class="section-title"><span class="gradient-text">All Projects</span></h1>
+    <p>A complete showcase of data analytics and data science projects — from exploratory analysis to machine learning models and interactive dashboards.</p>
+  </div>
+
+  <!-- PROJECTS PAGE -->
+  <section class="projects-page">
+    <div class="container">
+
+      <!-- Stats Bar -->
+      <div class="stats-bar reveal">
+        <div class="stats-bar-item">
+          <div class="stats-bar-num">2</div>
+          <div class="stats-bar-label">Total Projects</div>
+        </div>
+        <div class="stats-bar-item">
+          <div class="stats-bar-num">5+</div>
+          <div class="stats-bar-label">Tools Used</div>
+        </div>
+        <div class="stats-bar-item">
+          <div class="stats-bar-num">3</div>
+          <div class="stats-bar-label">Domains Covered</div>
+        </div>
+        <div class="stats-bar-item">
+          <div class="stats-bar-num">100%</div>
+          <div class="stats-bar-label">Open Source</div>
+        </div>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="python">Python</button>
+        <button class="filter-btn" data-filter="ml">Machine Learning</button>
+        <!-- <button class="filter-btn" data-filter="eda">EDA & Analysis</button> -->
+        <button class="filter-btn" data-filter="viz">Visualization</button>
+      </div>
+
+      <!-- Projects Grid -->
+      <div class="projects-full-grid">
+
+        <!-- Project 1 -->
+        <div class="project-card-full reveal" data-category="python">
+          <div class="project-num">01</div>
+          <div class="project-category">Python</div>
+          <div class="project-title">Enhancing Attendance Management Systems Using Facial Recognition</div>
+          <p class="project-desc">A facial recognition-based attendance system built with Python to automate attendance, reduce proxy entries, and provide real-time, accurate tracking for educational institutions.</p>
+          <ul class="project-highlights">
+            <li>Connected to 3 data sources via SQL and automated ETL pipeline</li>
+            <li>Designed 12+ interactive visuals including heatmaps, KPI cards, and waterfall charts</li>
+            <li>Implemented row-level security for multi-role access</li>
+          </ul>
+          <div class="project-tools">
+            <span class="tool-badge">Python</span>
+            <span class="tool-badge">Scikit-learn</span>
+            <span class="tool-badge">OpenCV</span>
+            <span class="tool-badge">TensorFlow</span>
+            <span class="tool-badge">PyTorch</span>
+          </div>
+          <div class="project-impact">✅ Reduced report generation time by 60% through automation</div>
+          <div class="project-links">
+            <a href="https://github.com/Prachi-n2/Face-attendence-system" class="project-link">⬡ GitHub</a>
+            <!-- <a href="#" class="project-link demo">▶ Live Demo</a> -->
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card-full reveal" data-category="ml">
+          <div class="project-num">02</div>
+          <div class="project-category">Machine Learning</div>
+          <div class="project-title">Video Information Extraction & Summarization Tool</div>
+          <p class="project-desc">A tool that uses machine learning and NLP to automatically summarize videos by extracting key content, reducing viewing time, and improving accessibility.</p>
+          <ul class="project-highlights">
+            <li>Developed an AI-powered system that automatically summarizes videos and extracts key information, reducing viewing time while preserving essential content.</li>
+            <li>Integrated machine learning, NLP transformers, and Django to create a scalable, multimodal web-based solution for efficient video analysis and information retrieval.</li>
+            <!-- <li>Feature importance analysis identified top 5 churn drivers</li> -->
+          </ul>
+          <div class="project-tools">
+            <span class="tool-badge">Python</span>
+            <span class="tool-badge">Scikit-learn</span>
+            <span class="tool-badge">OpenCV</span>
+            <span class="tool-badge">TensorFlow</span>
+            <span class="tool-badge">PyTorch</span>
+            <span class="tool-badge">HTML</span>
+            <span class="tool-badge">CSS</span>
+            <span class="tool-badge">JavaScript</span>
+          </div>
+          <div class="project-impact">✅ Reduced video viewing time by up to 60% through automated AI-based summarization.</div>
+          <div class="project-links">
+            <a href="https://github.com/Prachi-n2/Summary-tool" class="project-link">⬡ GitHub</a>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <!-- <div class="project-card-full reveal" data-category="eda">
+          <div class="project-num">03</div>
+          <div class="project-category">EDA & Analysis</div>
+          <div class="project-title">E-Commerce Data Analysis</div>
+          <p class="project-desc">Conducted deep exploratory data analysis on 50K+ e-commerce transaction records. Identified top-performing categories, seasonal revenue trends, customer segmentation patterns, and return rate anomalies.</p>
+          <ul class="project-highlights">
+            <li>Performed RFM (Recency, Frequency, Monetary) segmentation</li>
+            <li>Identified 3 seasonal peaks with 35%+ revenue uplift potential</li>
+            <li>Built interactive Tableau story with 8 connected dashboards</li>
+          </ul>
+          <div class="project-tools">
+            <span class="tool-badge">Python</span>
+            <span class="tool-badge">Tableau</span>
+            <span class="tool-badge">Pandas</span>
+            <span class="tool-badge">Matplotlib</span>
+          </div>
+          <div class="project-impact">✅ Uncovered 3 revenue growth opportunities worth $50K+</div>
+          <div class="project-links">
+            <a href="#" class="project-link">⬡ GitHub</a>
+            <a href="#" class="project-link demo">▶ Tableau Public</a>
+          </div>
+        </div> -->
+
+        <!-- Project 4 -->
+        <!-- <div class="project-card-full reveal" data-category="viz">
+          <div class="project-num">04</div>
+          <div class="project-category">Visualization</div>
+          <div class="project-title">COVID-19 Global Data Tracker</div>
+          <p class="project-desc">Designed a dynamic data visualization project tracking global COVID-19 trends across 190+ countries. Aggregated daily data from public APIs, performed time-series analysis, and built an interactive Tableau story dashboard updated automatically.</p>
+          <ul class="project-highlights">
+            <li>Automated daily data pulls from Johns Hopkins & WHO APIs using Python</li>
+            <li>Built time-series forecasting using moving averages</li>
+            <li>Choropleth maps showing regional spread with drill-down capability</li>
+          </ul>
+          <div class="project-tools">
+            <span class="tool-badge">Tableau</span>
+            <span class="tool-badge">Python</span>
+            <span class="tool-badge">REST API</span>
+            <span class="tool-badge">Pandas</span>
+          </div>
+          <div class="project-impact">✅ Dashboard adopted by 500+ viewers for real-time tracking</div>
+          <div class="project-links">
+            <a href="#" class="project-link">⬡ GitHub</a>
+            <a href="#" class="project-link demo">▶ Live Dashboard</a>
+          </div>
+        </div> -->
+
+        <!-- Project 5 -->
+        <!-- <div class="project-card-full reveal" data-category="ml">
+          <div class="project-num">05</div>
+          <div class="project-category">Machine Learning</div>
+          <div class="project-title">House Price Prediction Model</div>
+          <p class="project-desc">Built a regression model to predict residential property prices using 80+ features. Applied feature selection, outlier treatment, log transformation, and ensemble methods to achieve high accuracy on the Ames Housing dataset.</p>
+          <ul class="project-highlights">
+            <li>Reduced RMSE by 18% through log-target transformation</li>
+            <li>Stacked Lasso, Ridge, and Gradient Boosting for best performance</li>
+            <li>SHAP values used to explain predictions for end users</li>
+          </ul>
+          <div class="project-tools">
+            <span class="tool-badge">Python</span>
+            <span class="tool-badge">Scikit-learn</span>
+            <span class="tool-badge">SHAP</span>
+            <span class="tool-badge">Seaborn</span>
+          </div>
+          <div class="project-impact">✅ Achieved R² score of 0.91 on test set</div>
+          <div class="project-links">
+            <a href="#" class="project-link">⬡ GitHub</a>
+          </div>
+        </div> -->
+
+        <!-- Project 6 -->
+        <!-- <div class="project-card-full reveal" data-category="eda">
+          <div class="project-num">06</div>
+          <div class="project-category">EDA & Analysis</div>
+          <div class="project-title">HR Analytics — Attrition Study</div>
+          <p class="project-desc">Analyzed employee attrition patterns using IBM HR Analytics dataset. Explored relationships between job satisfaction, overtime, work-life balance, and attrition using statistical testing and visualization to help HR teams make data-driven retention decisions.</p>
+          <ul class="project-highlights">
+            <li>Chi-square tests confirmed significant correlation between overtime and attrition</li>
+            <li>Identified departments with 2x average attrition rate</li>
+            <li>Presented findings via a polished Power BI report</li>
+          </ul>
+          <div class="project-tools">
+            <span class="tool-badge">Python</span>
+            <span class="tool-badge">Power BI</span>
+            <span class="tool-badge">SciPy</span>
+            <span class="tool-badge">SQL</span>
+          </div>
+          <div class="project-impact">✅ Provided actionable insights to reduce attrition by estimated 15%</div>
+          <div class="project-links">
+            <a href="#" class="project-link">⬡ GitHub</a>
+            <a href="#" class="project-link demo">▶ Report PDF</a>
+          </div>
+        </div> -->
+
+        <!-- Project 7 -->
+        <!-- <div class="project-card-full reveal" data-category="dashboard">
+          <div class="project-num">07</div>
+          <div class="project-category">Dashboard</div>
+          <div class="project-title">Financial KPI Tracker — Excel</div>
+          <p class="project-desc">Designed an advanced Excel dashboard to track financial KPIs including revenue, expenses, profit margins, and budget variance for a small business. Used dynamic named ranges, slicers, and conditional formatting for a clean, executive-ready layout.</p>
+          <ul class="project-highlights">
+            <li>Dynamic charts auto-update based on month and department slicers</li>
+            <li>Variance analysis with RAG (Red/Amber/Green) status indicators</li>
+            <li>No VBA — built entirely with formulas and Power Query</li>
+          </ul>
+          <div class="project-tools">
+            <span class="tool-badge">Excel</span>
+            <span class="tool-badge">Power Query</span>
+            <span class="tool-badge">Pivot Tables</span>
+          </div>
+          <div class="project-impact">✅ Saved 5+ hours/week in manual reporting for the finance team</div>
+          <div class="project-links">
+            <a href="#" class="project-link">⬡ GitHub</a>
+          </div>
+        </div> -->
+
+      </div><!-- end grid -->
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">Prachi Narnaware</div>
+    <div class="footer-copy">© 2025 Prachi Narnaware. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="certifications.html">Certifications</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Filter functionality
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card-full');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter');
+
+        // Update active button
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Show/hide cards with animation
+        projectCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filter === 'all' || category === filter) {
+            card.style.display = 'flex';
+            setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 10);
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(10px)';
+            setTimeout(() => { card.style.display = 'none'; }, 250);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
